@@ -1,0 +1,133 @@
+<!-- 
+    
+    PROBLEM STATEMENT:
+    Create a News Application using HTML and CSS
+
+    SUBMITTED BY:
+    Parth Khandelwal (parthkhandelwal.dev@gmail.com)
+
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsHub - Modern News Portal</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Using an External Font from Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <h1 class="logo">NewsHub</h1>
+            <nav class="nav">
+                <a href="#" class="nav-link active">Home</a>
+                <a href="#" class="nav-link">World</a>
+                <a href="#" class="nav-link">Technology</a>
+                <a href="#" class="nav-link">Sports</a>
+                <a href="#" class="nav-link">Business</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <section class="hero">
+                <div class="hero-content">
+                    <h2 class="hero-title">Breaking News</h2>
+                    <p class="hero-subtitle">Stay informed with the latest updates from around the world</p>
+                </div>
+            </section>
+
+            <section class="news-grid">
+                <article class="news-card featured">
+                    <!-- Using Placehold API to demonstrate the News Images -->
+                    <img src="https://placehold.co/600x300/2563eb/ffffff?text=Breaking+News&font=lato" alt="Breaking News" class="news-image">
+                    <div class="news-content">
+                        <span class="news-category">World</span>
+                        <h3 class="news-title">Global Climate Summit Reaches Historic Agreement</h3>
+                        <p class="news-excerpt">World leaders unite in unprecedented climate action plan, setting ambitious targets for carbon neutrality by 2050...</p>
+                        <div class="news-meta">
+                            <span class="news-date">2 hours ago</span>
+                            <span class="news-author">By Sarah Johnson</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="https://placehold.co/400x200/059669/ffffff?text=Technology&font=lato" alt="Technology News" class="news-image">
+                    <div class="news-content">
+                        <span class="news-category">Technology</span>
+                        <h3 class="news-title">AI Revolution Transforms Healthcare Industry</h3>
+                        <p class="news-excerpt">Revolutionary AI system helps doctors diagnose diseases with 95% accuracy...</p>
+                        <div class="news-meta">
+                            <span class="news-date">4 hours ago</span>
+                            <span class="news-author">By Michael Chen</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="https://placehold.co/400x200/dc2626/ffffff?text=Sports&font=lato" alt="Sports News" class="news-image">
+                    <div class="news-content">
+                        <span class="news-category">Sports</span>
+                        <h3 class="news-title">Championship Finals Set Record Viewership</h3>
+                        <p class="news-excerpt">Historic match draws millions of viewers worldwide, breaking streaming records...</p>
+                        <div class="news-meta">
+                            <span class="news-date">6 hours ago</span>
+                            <span class="news-author">By Emma Rodriguez</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="https://placehold.co/400x200/7c3aed/ffffff?text=Business&font=lato" alt="Business News" class="news-image">
+                    <div class="news-content">
+                        <span class="news-category">Business</span>
+                        <h3 class="news-title">Market Surge Continues as Tech Stocks Rise</h3>
+                        <p class="news-excerpt">Technology sector leads market gains for third consecutive week...</p>
+                        <div class="news-meta">
+                            <span class="news-date">8 hours ago</span>
+                            <span class="news-author">By David Park</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="https://placehold.co/400x200/ea580c/ffffff?text=Science&font=lato" alt="Science News" class="news-image">
+                    <div class="news-content">
+                        <span class="news-category">Science</span>
+                        <h3 class="news-title">Breakthrough Discovery in Quantum Computing</h3>
+                        <p class="news-excerpt">Scientists achieve quantum supremacy milestone with new processor design...</p>
+                        <div class="news-meta">
+                            <span class="news-date">10 hours ago</span>
+                            <span class="news-author">By Dr. Lisa Kumar</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="news-card">
+                    <img src="https://placehold.co/400x200/16a34a/ffffff?text=Environment&font=lato" alt="Environment News" class="news-image">
+                    <div class="news-content">
+                        <span class="news-category">Environment</span>
+                        <h3 class="news-title">Renewable Energy Reaches New Milestone</h3>
+                        <p class="news-excerpt">Solar and wind power now account for 40% of global electricity generation...</p>
+                        <div class="news-meta">
+                            <span class="news-date">12 hours ago</span>
+                            <span class="news-author">By Alex Thompson</span>
+                        </div>
+                    </div>
+                </article>
+            </section>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 NewsHub. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>

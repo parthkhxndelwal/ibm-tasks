@@ -1,0 +1,6 @@
+{
+  "rewrites": [
+    { "source": "/task1", "destination": "/task1/index.html" },
+    { "source": "/task2", "destination": "/task2/index.html" }
+  ]
+}
