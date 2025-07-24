@@ -4,14 +4,306 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IBM Training Tasks - Parth Khandelwal</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .intro {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .intro h2 {
+            color: #2c3e50;
+            font-size: 2em;
+            margin-bottom: 15px;
+        }
+
+        .intro p {
+            color: #666;
+            font-size: 1.1em;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .tasks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+
+        .task-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 5px solid;
+        }
+
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .task-card.task-1 {
+            border-left-color: #e74c3c;
+        }
+
+        .task-card.task-2 {
+            border-left-color: #3498db;
+        }
+
+        .task-card.task-3a {
+            border-left-color: #27ae60;
+        }
+
+        .task-card.task-3b {
+            border-left-color: #f39c12;
+        }
+
+        .task-number {
+            display: inline-block;
+            background: #2c3e50;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .task-title {
+            color: #2c3e50;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .task-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .task-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .tech-tag {
+            background: #ecf0f1;
+            color: #2c3e50;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: 500;
+        }
+
+        .task-link {
+            position: relative;
+            display: inline-flex;
+            height: 48px;
+            overflow: hidden;
+            border-radius: 9999px;
+            padding: 3px;
+            text-decoration: none;
+            outline: none;
+            transition: all 0.4s ease;
+        }
+
+        
+
+        .task-link:hover {
+            transform: scale(1.10);
+        }
+
+        .task-link::before {
+            content: '';
+            position: absolute;
+            inset: -1000%;
+            background: conic-gradient(from 90deg at 50% 50%, #7700ff 0%, #000000 50%, #7300ff 100%);
+            animation: spin 2s linear infinite;
+        }
+
+        .task-link-inner {
+            display: inline-flex;
+            height: 100%;
+            width: 100%;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            background-color: #ffffff;
+            padding: 0 30px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgb(0, 0, 0);
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes spin {
+            from {
+                transform: rotate(0deg);
+            }
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .tasks-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <center>
-        <h1>Tasks Completed Yet</h1>
-        <a href="/Task_1">Task 1</a><br>
-        <a href="/Task_2">Task 2</a>
-        
-    </center>
-    
+    <div class="container">
+        <header class="header">
+            <h1>IBM Training Tasks</h1>
+            <p>Parth Khandelwal - Web Development Journey</p>
+        </header>
+
+        <div class="content">
+            <div class="intro">
+                <h2>Training Progress Overview</h2>
+                <p>Welcome to my IBM Training Task Navigator! Here you'll find a collection of web development tasks completed during my training program. Each task demonstrates different aspects of HTML, CSS, and modern web development techniques.</p>
+            </div>
+
+            <div class="tasks-grid">
+                <div class="task-card task-1">
+                    <div class="task-number">Task 1</div>
+                    <h3 class="task-title">Student Grade Information System</h3>
+                    <p class="task-description">
+                        An HTML webpage I built for displaying the student grade information using well-structured tables. Includes student records with roll numbers, names, subjects, marks, and grades, plus a detailed grading criteria table with performance indicators.
+                    </p>
+                    <div class="task-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">Tables</span>
+                        <span class="tech-tag">Semantic HTML</span>
+                    </div>
+                    <a href="/Task_1" class="task-link">
+                        <span class="task-link-inner">View Project →</span>
+                    </a>
+                </div>
+
+                <div class="task-card task-2">
+                    <div class="task-number">Task 2</div>
+                    <h3 class="task-title">NewsHub - Modern News Portal</h3>
+                    <p class="task-description">
+                        A responsive news application built with HTML and CSS featuring a modern design, grid layouts, and external font integration. Includes navigation, hero sections, news cards, and demonstrates advanced CSS styling techniques.
+                    </p>
+                    <div class="task-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS3</span>
+                        <span class="tech-tag">Responsive Design</span>
+                        <span class="tech-tag">Grid Layout</span>
+                        <span class="tech-tag">Google Fonts</span>
+                    </div>
+                    <a href="/Task_2" class="task-link">
+                        <span class="task-link-inner">View Project →</span>
+                    </a>
+                </div>
+
+                <div class="task-card task-3a">
+                    <div class="task-number">Task 3A</div>
+                    <h3 class="task-title">Chess Board</h3>
+                    <p class="task-description">
+                        A chess board created using CSS Grid layout. Features alternating square colors, proper chess piece positioning, and demonstrates CSS grid techniques for creating chess boards and structured layouts.
+                    </p>
+                    <div class="task-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">CSS Grid</span>
+                    </div>
+                    <a href="/Task_3a" class="task-link">
+                        <span class="task-link-inner">View Project →</span>
+                    </a>
+                </div>
+
+                <div class="task-card task-3b">
+                    <div class="task-number">Task 3B</div>
+                    <h3 class="task-title">Enhanced Chess Board</h3>
+                    <p class="task-description">
+                        An alternate version of the chess board task with added pawns and other chess pieces, and improved visual elements.
+                    </p>
+                    <div class="task-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">Bonus Task</span>
+                        
+                    </div>
+                    <a href="/Task_3b" class="task-link">
+                        <span class="task-link-inner">View Project →</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2025 Parth Khandelwal | parthkhandelwal.dev@gmail.com</p>
+        </footer>
+    </div>
 </body>
 </html>
