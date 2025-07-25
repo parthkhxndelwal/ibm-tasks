@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -103,16 +104,18 @@
         .task-card.task-3b {
             border-left-color: #f39c12;
         }
-
+        .task-card.task-todo {
+            border-left-color: #6200ff;
+        }
         .task-number {
             display: inline-block;
-            background: #2c3e50;
-            color: white;
+            background: #ffffff;
+            color: rgb(0, 0, 0);
             padding: 8px 15px;
             border-radius: 20px;
             font-size: 0.9em;
-            font-weight: bold;
             margin-bottom: 15px;
+            border: 1px solid #000000;
         }
 
         .task-title {
@@ -156,7 +159,7 @@
             transition: all 0.4s ease;
         }
 
-        
+
 
         .task-link:hover {
             transform: scale(1.10);
@@ -191,6 +194,7 @@
             from {
                 transform: rotate(0deg);
             }
+
             to {
                 transform: rotate(360deg);
             }
@@ -210,17 +214,18 @@
             .header h1 {
                 font-size: 2em;
             }
-            
+
             .tasks-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .content {
                 padding: 20px;
             }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header class="header">
@@ -231,15 +236,38 @@
         <div class="content">
             <div class="intro">
                 <h2>Training Progress Overview</h2>
-                <p>Welcome to my IBM Training Task Navigator! Here you'll find a collection of web development tasks completed during my training program. Each task demonstrates different aspects of HTML, CSS, and modern web development techniques.</p>
+                <p>Welcome to my IBM Training Task Navigator! Here you'll find a collection of web development tasks
+                    completed during my training program. Each task demonstrates different aspects of HTML, CSS, and
+                    modern web development techniques.</p>
             </div>
-
+            
             <div class="tasks-grid">
+                <div class="task-card task-todo">
+                    <div class="task-number" style="background-color: #ed8e22;">Featured</div>
+                    <h3 class="task-title">Taskflow</h3>
+                    <p class="task-description">
+                        TaskFlow is a modern, full-featured task management web application built with Next.js, React, TypeScript, MongoDB, and Tailwind CSS. It provides a beautiful, responsive UI and a robust set of features for managing tasks, lists, and user accounts.
+                    </p>
+                    <div class="task-tech">
+                        <span class="tech-tag">HTML5</span>
+                        <span class="tech-tag">Bonus Task</span>
+                
+                    </div>
+                    <a href="https://taskflow.parth.engineer/" class="task-link">
+                        <span class="task-link-inner">View Project →</span>
+                    </a>
+                    <a href="https://github.com/parthkhxndelwal/Taskflow"
+                        style="margin: 0; padding: 0; color: black; text-decoration: underline; padding: 0 10px;">View
+                        Source</a>
+                </div>
+                
                 <div class="task-card task-1">
-                    <div class="task-number">Task 1</div>
+                    <div class="task-number">Task</div>
                     <h3 class="task-title">Student Grade Information System</h3>
                     <p class="task-description">
-                        An HTML webpage I built for displaying the student grade information using well-structured tables. Includes student records with roll numbers, names, subjects, marks, and grades, plus a detailed grading criteria table with performance indicators.
+                        An HTML webpage I built for displaying the student grade information using well-structured
+                        tables. Includes student records with roll numbers, names, subjects, marks, and grades, plus a
+                        detailed grading criteria table with performance indicators.
                     </p>
                     <div class="task-tech">
                         <span class="tech-tag">HTML5</span>
@@ -249,13 +277,19 @@
                     <a href="/Task_1" class="task-link">
                         <span class="task-link-inner">View Project →</span>
                     </a>
+                    <a href="https://github.com/parthkhxndelwal/ibm-tasks/tree/main/Task_1/index.html"
+                        style="margin: 0; padding: 0; color: black; text-decoration: underline; padding: 0 10px;">View
+                        Source</a>
+
                 </div>
 
                 <div class="task-card task-2">
-                    <div class="task-number">Task 2</div>
+                    <div class="task-number">Task</div>
                     <h3 class="task-title">NewsHub - Modern News Portal</h3>
                     <p class="task-description">
-                        A responsive news application built with HTML and CSS featuring a modern design, grid layouts, and external font integration. Includes navigation, hero sections, news cards, and demonstrates advanced CSS styling techniques.
+                        A responsive news application built with HTML and CSS featuring a modern design, grid layouts,
+                        and external font integration. Includes navigation, hero sections, news cards, and demonstrates
+                        advanced CSS styling techniques.
                     </p>
                     <div class="task-tech">
                         <span class="tech-tag">HTML5</span>
@@ -267,13 +301,18 @@
                     <a href="/Task_2" class="task-link">
                         <span class="task-link-inner">View Project →</span>
                     </a>
+                    <a href="https://github.com/parthkhxndelwal/ibm-tasks/tree/main/Task_2"
+                        style="margin: 0; padding: 0; color: black; text-decoration: underline; padding: 0 10px;">View
+                        Source</a>
                 </div>
 
                 <div class="task-card task-3a">
-                    <div class="task-number">Task 3A</div>
+                    <div class="task-number">Task</div>
                     <h3 class="task-title">Chess Board</h3>
                     <p class="task-description">
-                        A chess board created using CSS Grid layout. Features alternating square colors, proper chess piece positioning, and demonstrates CSS grid techniques for creating chess boards and structured layouts.
+                        A chess board created using CSS Grid layout. Features alternating square colors, proper chess
+                        piece positioning, and demonstrates CSS grid techniques for creating chess boards and structured
+                        layouts.
                     </p>
                     <div class="task-tech">
                         <span class="tech-tag">HTML5</span>
@@ -282,24 +321,32 @@
                     <a href="/Task_3a" class="task-link">
                         <span class="task-link-inner">View Project →</span>
                     </a>
+                    <a href="https://github.com/parthkhxndelwal/ibm-tasks/tree/main/Task_3a/index.html"
+                        style="margin: 0; padding: 0; color: black; text-decoration: underline; padding: 0 10px;">View
+                        Source</a>
+
                 </div>
 
                 <div class="task-card task-3b">
-                    <div class="task-number">Task 3B</div>
+                    <div class="task-number">Task</div>
                     <h3 class="task-title">Enhanced Chess Board</h3>
                     <p class="task-description">
-                        An alternate version of the chess board task with added pawns and other chess pieces, and improved visual elements.
+                        An alternate version of the chess board task with added pawns and other chess pieces, and
+                        improved visual elements.
                     </p>
                     <div class="task-tech">
                         <span class="tech-tag">HTML5</span>
                         <span class="tech-tag">Bonus Task</span>
-                        
+
                     </div>
                     <a href="/Task_3b" class="task-link">
                         <span class="task-link-inner">View Project →</span>
                     </a>
+                    <a href="https://github.com/parthkhxndelwal/ibm-tasks/tree/main/Task_3b/index.html"
+                        style="margin: 0; padding: 0; color: black; text-decoration: underline; padding: 0 10px;">View
+                        Source</a>
                 </div>
-            </div>
+                </div>
         </div>
 
         <footer class="footer">
@@ -307,4 +354,5 @@
         </footer>
     </div>
 </body>
+
 </html>
