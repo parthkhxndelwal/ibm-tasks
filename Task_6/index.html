@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- 
+    
+    Note: AI was used to clean the code after development as part of ongoing efforts for 
+    AI-assisted development 
+    
+    -->
+    
+    <title>Music Collection</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 0 auto 2rem;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 3rem 1rem 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #64748b;
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            padding: 0.5rem 1.5rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 2rem;
+            background: white;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .filter-tab.active,
+        .filter-tab:hover {
+            border-color: #3b82f6;
+            background: #3b82f6;
+            color: white;
+        }
+
+        .songs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .song-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .song-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-color: #3b82f6;
+        }
+
+        .song-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .album-art {
+            width: 60px;
+            height: 60px;
+            background: #e2e8f0;
+            border-radius: 0.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .song-info h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+
+        .song-info .artist {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .song-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .song-duration {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .song-genre {
+            background: #f1f5f9;
+            color: #475569;
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .play-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            background: #3b82f6;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+
+        .play-btn:hover {
+            background: #2563eb;
+            transform: scale(1.1);
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 4px;
+            background: #e2e8f0;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        .volume-control {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .volume-icon {
+            color: #64748b;
+        }
+
+        .stats-bar {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            display: flex;
+            justify-content: space-around;
+            text-align: center;
+        }
+
+        .stat-item h4 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item p {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .playlist-section {
+            margin-top: 3rem;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 1rem;
+        }
+
+        .playlist-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .playlist-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .playlist-item:hover {
+            background: #f8fafc;
+            border-color: #3b82f6;
+        }
+
+        .playlist-number {
+            width: 30px;
+            height: 30px;
+            background: #f1f5f9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+
+        .playlist-info {
+            flex: 1;
+        }
+
+        .playlist-info h4 {
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 0.25rem;
+        }
+
+        .playlist-info .playlist-artist {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        .playlist-duration {
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .songs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .filter-tabs {
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>Music Collection</h1>
+        </header>
+
+        <div class="search-bar">
+            <input type="text" class="search-input" placeholder="Search songs, artists, or albums...">
+            <div class="search-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="filter-tabs">
+            <div class="filter-tab active" data-filter="all">All</div>
+            <div class="filter-tab" data-filter="pop">Pop</div>
+            <div class="filter-tab" data-filter="rock">Rock</div>
+            <div class="filter-tab" data-filter="jazz">Jazz</div>
+            <div class="filter-tab" data-filter="electronic">Electronic</div>
+            <div class="filter-tab" data-filter="classical">Classical</div>
+        </div>
+
+        <div class="songs-grid" id="songsGrid">
+            <!-- Songs will be populated by JavaScript -->
+        </div>
+
+        <div class="stats-bar">
+            <div class="stat-item">
+                <h4>124</h4>
+                <p>Total Songs</p>
+            </div>
+            <div class="stat-item">
+                <h4>8.5</h4>
+                <p>Hours</p>
+            </div>
+            <div class="stat-item">
+                <h4>15</h4>
+                <p>Artists</p>
+            </div>
+            <div class="stat-item">
+                <h4>7</h4>
+                <p>Albums</p>
+            </div>
+        </div>
+
+        <section class="playlist-section">
+            <h2 class="section-title">Recently Played</h2>
+            <div class="playlist-list">
+                <div class="playlist-item">
+                    <div class="playlist-number">1</div>
+                    <div class="playlist-info">
+                        <h4>Bohemian Rhapsody</h4>
+                        <p class="playlist-artist">Queen</p>
+                    </div>
+                    <div class="playlist-duration">5:55</div>
+                </div>
+                <div class="playlist-item">
+                    <div class="playlist-number">2</div>
+                    <div class="playlist-info">
+                        <h4>Hotel California</h4>
+                        <p class="playlist-artist">Eagles</p>
+                    </div>
+                    <div class="playlist-duration">6:30</div>
+                </div>
+                <div class="playlist-item">
+                    <div class="playlist-number">3</div>
+                    <div class="playlist-info">
+                        <h4>Sweet Child O' Mine</h4>
+                        <p class="playlist-artist">Guns N' Roses</p>
+                    </div>
+                    <div class="playlist-duration">5:03</div>
+                </div>
+                <div class="playlist-item">
+                    <div class="playlist-number">4</div>
+                    <div class="playlist-info">
+                        <h4>Imagine</h4>
+                        <p class="playlist-artist">John Lennon</p>
+                    </div>
+                    <div class="playlist-duration">3:07</div>
+                </div>
+                <div class="playlist-item">
+                    <div class="playlist-number">5</div>
+                    <div class="playlist-info">
+                        <h4>Stairway to Heaven</h4>
+                        <p class="playlist-artist">Led Zeppelin</p>
+                    </div>
+                    <div class="playlist-duration">8:02</div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const songsData = [
+            {
+                title: "Bohemian Rhapsody",
+                artist: "Queen",
+                duration: "5:55",
+                genre: "rock",
+                album: "A Night at the Opera",
+                icon: "🎸"
+            },
+            {
+                title: "Billie Jean",
+                artist: "Michael Jackson",
+                duration: "4:54",
+                genre: "pop",
+                album: "Thriller",
+                icon: "🎤"
+            },
+            {
+                title: "Take Five",
+                artist: "Dave Brubeck",
+                duration: "5:24",
+                genre: "jazz",
+                album: "Time Out",
+                icon: "🎷"
+            },
+            {
+                title: "One More Time",
+                artist: "Daft Punk",
+                duration: "5:20",
+                genre: "electronic",
+                album: "Discovery",
+                icon: "🎧"
+            },
+            {
+                title: "Canon in D",
+                artist: "Pachelbel",
+                duration: "4:33",
+                genre: "classical",
+                album: "Classical Masterpieces",
+                icon: "🎼"
+            },
+            {
+                title: "Hotel California",
+                artist: "Eagles",
+                duration: "6:30",
+                genre: "rock",
+                album: "Hotel California",
+                icon: "🎸"
+            },
+            {
+                title: "Shape of You",
+                artist: "Ed Sheeran",
+                duration: "3:53",
+                genre: "pop",
+                album: "÷ (Divide)",
+                icon: "🎵"
+            },
+            {
+                title: "Blue in Green",
+                artist: "Miles Davis",
+                duration: "5:37",
+                genre: "jazz",
+                album: "Kind of Blue",
+                icon: "🎺"
+            },
+            {
+                title: "Strobe",
+                artist: "deadmau5",
+                duration: "10:36",
+                genre: "electronic",
+                album: "For Lack of a Better Name",
+                icon: "🎧"
+            },
+            {
+                title: "Symphony No. 9",
+                artist: "Beethoven",
+                duration: "9:15",
+                genre: "classical",
+                album: "Beethoven's Symphonies",
+                icon: "🎼"
+            },
+            {
+                title: "Sweet Child O' Mine",
+                artist: "Guns N' Roses",
+                duration: "5:03",
+                genre: "rock",
+                album: "Appetite for Destruction",
+                icon: "🎸"
+            },
+            {
+                title: "Thriller",
+                artist: "Michael Jackson",
+                duration: "5:57",
+                genre: "pop",
+                album: "Thriller",
+                icon: "🎤"
+            }
+        ];
+
+        let currentFilter = 'all';
+        let playingCard = null;
+
+        function renderSongs(songs = songsData) {
+            const songsGrid = document.getElementById('songsGrid');
+            
+            songsGrid.innerHTML = songs.map(song => `
+                <div class="song-card" data-genre="${song.genre}">
+                    <div class="song-header">
+                        <div class="album-art">${song.icon}</div>
+                        <div class="song-info">
+                            <h3>${song.title}</h3>
+                            <p class="artist">${song.artist}</p>
+                        </div>
+                    </div>
+                    <div class="song-details">
+                        <span class="song-duration">${song.duration}</span>
+                        <span class="song-genre">${song.genre}</span>
+                    </div>
+                    <div class="play-controls">
+                        <button class="play-btn" onclick="togglePlay(this)">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polygon points="5,3 19,12 5,21"></polygon>
+                            </svg>
+                        </button>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                        <div class="volume-control">
+                            <div class="volume-icon">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="11,5 6,9 2,9 2,15 6,15 11,19"></polygon>
+                                    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterSongs(genre) {
+            currentFilter = genre;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.filter === genre) {
+                    tab.classList.add('active');
+                }
+            });
+
+            // Filter and render songs
+            const filteredSongs = genre === 'all' 
+                ? songsData 
+                : songsData.filter(song => song.genre === genre);
+            
+            renderSongs(filteredSongs);
+        }
+
+        function togglePlay(button) {
+            const card = button.closest('.song-card');
+            const progressFill = card.querySelector('.progress-fill');
+            
+            if (playingCard && playingCard !== card) {
+                // Stop previous song
+                const prevButton = playingCard.querySelector('.play-btn');
+                const prevProgress = playingCard.querySelector('.progress-fill');
+                prevButton.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21"></polygon>
+                    </svg>
+                `;
+                prevProgress.style.width = '0%';
+                playingCard.style.backgroundColor = '';
+            }
+
+            if (playingCard === card) {
+                // Pause current song
+                button.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="5,3 19,12 5,21"></polygon>
+                    </svg>
+                `;
+                progressFill.style.width = '0%';
+                card.style.backgroundColor = '';
+                playingCard = null;
+            } else {
+                // Play new song
+                button.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                `;
+                progressFill.style.width = '60%';
+                card.style.backgroundColor = '#f8fafc';
+                playingCard = card;
+            }
+        }
+
+        function searchSongs(query) {
+            const filteredSongs = songsData.filter(song => 
+                song.title.toLowerCase().includes(query.toLowerCase()) ||
+                song.artist.toLowerCase().includes(query.toLowerCase()) ||
+                song.album.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (currentFilter !== 'all') {
+                const genreFiltered = filteredSongs.filter(song => song.genre === currentFilter);
+                renderSongs(genreFiltered);
+            } else {
+                renderSongs(filteredSongs);
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            renderSongs();
+
+            // Filter tabs
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    filterSongs(tab.dataset.filter);
+                });
+            });
+
+            // Search functionality
+            const searchInput = document.querySelector('.search-input');
+            searchInput.addEventListener('input', (e) => {
+                searchSongs(e.target.value);
+            });
+
+            // Playlist items
+            document.querySelectorAll('.playlist-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    item.style.backgroundColor = '#f1f5f9';
+                    setTimeout(() => {
+                        item.style.backgroundColor = '';
+                    }, 200);
+                });
+            });
+        });
+    </script>
+</body>
+</html>
