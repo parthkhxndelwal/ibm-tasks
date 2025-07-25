@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 
+    
+    Note: AI was used to clean the code after development as part of ongoing efforts for 
+    AI-assisted development 
+    
+    -->
+    <title>Survey Form - Modern UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #ffffff 0%, #e1c2ff 100%);
+            min-height: 100vh;
+            padding: 20px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 100%);
+            color: white;
+            padding: 32px;
+            text-align: center;
+            border-radius: 16px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .form-container {
+            padding: 32px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #ef4444;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: white;
+            color: #374151;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-input:hover, .form-select:hover, .form-textarea:hover {
+            border-color: #9ca3af;
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .radio-group, .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .radio-item, .checkbox-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+        }
+
+        .radio-item:hover, .checkbox-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .radio-item.selected, .checkbox-item.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .radio-input, .checkbox-input {
+            width: 20px;
+            height: 20px;
+            margin-right: 12px;
+            accent-color: #3b82f6;
+        }
+
+        .radio-label, .checkbox-label {
+            flex: 1;
+            font-size: 0.95rem;
+            color: #374151;
+            cursor: pointer;
+        }
+
+        .rating-group {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .rating-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-width: 60px;
+            background: white;
+        }
+
+        .rating-item:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .rating-item.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .rating-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 4px;
+        }
+
+        .rating-text {
+            font-size: 0.75rem;
+            color: #6b7280;
+            text-align: center;
+        }
+
+        .error-message {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 4px;
+            display: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #e5e7eb;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .success-message {
+            display: none;
+            text-align: center;
+            padding: 32px;
+            color: #059669;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 10px;
+                border-radius: 12px;
+            }
+
+            .header {
+                padding: 24px;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .form-container {
+                padding: 24px;
+            }
+
+            .rating-group {
+                gap: 4px;
+            }
+
+            .rating-item {
+                min-width: 50px;
+                padding: 8px;
+            }
+        }
+
+        /* Animation for form appearance */
+        .form-group {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.5s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+        .form-group:nth-child(8) { animation-delay: 0.8s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Customer Satisfaction Survey</h1>
+            <p>Help us improve our services by sharing your experience</p>
+        </div>
+
+        <div class="form-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <form id="surveyForm">
+                <div class="form-group">
+                    <label for="fullName" class="form-label required">Full Name</label>
+                    <input type="text" id="fullName" name="fullName" class="form-input" placeholder="Enter your full name" required>
+                    <div class="error-message" id="fullNameError">Please enter your full name</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="form-label required">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-input" placeholder="Enter your email address" required>
+                    <div class="error-message" id="emailError">Please enter a valid email address</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="age" class="form-label">Age Group</label>
+                    <select id="age" name="age" class="form-select">
+                        <option value="">Select your age group</option>
+                        <option value="18-24">18-24</option>
+                        <option value="25-34">25-34</option>
+                        <option value="35-44">35-44</option>
+                        <option value="45-54">45-54</option>
+                        <option value="55-64">55-64</option>
+                        <option value="65+">65+</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">How did you hear about us?</label>
+                    <div class="radio-group">
+                        <div class="radio-item" data-value="social-media">
+                            <input type="radio" id="social" name="source" value="social-media" class="radio-input">
+                            <label for="social" class="radio-label">Social Media</label>
+                        </div>
+                        <div class="radio-item" data-value="search-engine">
+                            <input type="radio" id="search" name="source" value="search-engine" class="radio-input">
+                            <label for="search" class="radio-label">Search Engine</label>
+                        </div>
+                        <div class="radio-item" data-value="friend-referral">
+                            <input type="radio" id="referral" name="source" value="friend-referral" class="radio-input">
+                            <label for="referral" class="radio-label">Friend Referral</label>
+                        </div>
+                        <div class="radio-item" data-value="advertisement">
+                            <input type="radio" id="ads" name="source" value="advertisement" class="radio-input">
+                            <label for="ads" class="radio-label">Advertisement</label>
+                        </div>
+                    </div>
+                    <div class="error-message" id="sourceError">Please select how you heard about us</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Which services are you interested in? (Select all that apply)</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item" data-value="web-development">
+                            <input type="checkbox" id="web-dev" name="services" value="web-development" class="checkbox-input">
+                            <label for="web-dev" class="checkbox-label">Web Development</label>
+                        </div>
+                        <div class="checkbox-item" data-value="mobile-apps">
+                            <input type="checkbox" id="mobile" name="services" value="mobile-apps" class="checkbox-input">
+                            <label for="mobile" class="checkbox-label">Mobile App Development</label>
+                        </div>
+                        <div class="checkbox-item" data-value="ui-design">
+                            <input type="checkbox" id="design" name="services" value="ui-design" class="checkbox-input">
+                            <label for="design" class="checkbox-label">UI/UX Design</label>
+                        </div>
+                        <div class="checkbox-item" data-value="consulting">
+                            <input type="checkbox" id="consulting" name="services" value="consulting" class="checkbox-input">
+                            <label for="consulting" class="checkbox-label">Technology Consulting</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label required">Overall satisfaction with our service</label>
+                    <div class="rating-group">
+                        <div class="rating-item" data-rating="1">
+                            <div class="rating-number">1</div>
+                            <div class="rating-text">Very Poor</div>
+                        </div>
+                        <div class="rating-item" data-rating="2">
+                            <div class="rating-number">2</div>
+                            <div class="rating-text">Poor</div>
+                        </div>
+                        <div class="rating-item" data-rating="3">
+                            <div class="rating-number">3</div>
+                            <div class="rating-text">Average</div>
+                        </div>
+                        <div class="rating-item" data-rating="4">
+                            <div class="rating-number">4</div>
+                            <div class="rating-text">Good</div>
+                        </div>
+                        <div class="rating-item" data-rating="5">
+                            <div class="rating-number">5</div>
+                            <div class="rating-text">Excellent</div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="rating" name="rating" required>
+                    <div class="error-message" id="ratingError">Please select a rating</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="feedback" class="form-label">Additional Comments</label>
+                    <textarea id="feedback" name="feedback" class="form-textarea" placeholder="Share your thoughts, suggestions, or any additional feedback..."></textarea>
+                </div>
+
+                <button type="submit" class="submit-btn" id="submitBtn">
+                    Submit Survey
+                </button>
+            </form>
+
+            <div class="success-message" id="successMessage">
+                <div class="success-icon">✅</div>
+                <h2>Thank you for your feedback!</h2>
+                <p>Your response has been recorded successfully.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Form validation and interaction
+        const form = document.getElementById('surveyForm');
+        const progressFill = document.getElementById('progressFill');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+        
+        // Radio button interaction
+        document.querySelectorAll('.radio-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const radioGroup = this.closest('.radio-group');
+                radioGroup.querySelectorAll('.radio-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+                updateProgress();
+            });
+        });
+
+        // Checkbox interaction
+        document.querySelectorAll('.checkbox-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (e.target.type !== 'checkbox') {
+                    const checkbox = this.querySelector('input[type="checkbox"]');
+                    checkbox.checked = !checkbox.checked;
+                }
+                this.classList.toggle('selected', this.querySelector('input[type="checkbox"]').checked);
+                updateProgress();
+            });
+        });
+
+        // Rating interaction
+        document.querySelectorAll('.rating-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const ratingGroup = this.closest('.rating-group');
+                const rating = this.dataset.rating;
+                
+                ratingGroup.querySelectorAll('.rating-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                document.getElementById('rating').value = rating;
+                updateProgress();
+            });
+        });
+
+        // Progress tracking
+        function updateProgress() {
+            const totalFields = 8;
+            let completedFields = 0;
+
+            // Check required fields
+            if (document.getElementById('fullName').value.trim()) completedFields++;
+            if (document.getElementById('email').value.trim()) completedFields++;
+            if (document.querySelector('input[name="source"]:checked')) completedFields++;
+            if (document.getElementById('rating').value) completedFields++;
+
+            // Check optional fields
+            if (document.getElementById('age').value) completedFields++;
+            if (document.querySelector('input[name="services"]:checked')) completedFields++;
+            if (document.getElementById('feedback').value.trim()) completedFields++;
+
+            const progress = (completedFields / totalFields) * 100;
+            progressFill.style.width = progress + '%';
+        }
+
+        // Real-time validation
+        document.getElementById('fullName').addEventListener('input', updateProgress);
+        document.getElementById('email').addEventListener('input', updateProgress);
+        document.getElementById('age').addEventListener('change', updateProgress);
+        document.getElementById('feedback').addEventListener('input', updateProgress);
+
+        // Form submission
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            let isValid = true;
+            
+            // Validate required fields
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('email');
+            const source = document.querySelector('input[name="source"]:checked');
+            const rating = document.getElementById('rating').value;
+
+            // Reset error messages
+            document.querySelectorAll('.error-message').forEach(msg => msg.style.display = 'none');
+
+            if (!fullName.value.trim()) {
+                document.getElementById('fullNameError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!email.value.trim() || !email.validity.valid) {
+                document.getElementById('emailError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!source) {
+                document.getElementById('sourceError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (!rating) {
+                document.getElementById('ratingError').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Simulate form submission
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Submitting...';
+                
+                setTimeout(() => {
+                    form.style.display = 'none';
+                    successMessage.style.display = 'block';
+                    progressFill.style.width = '100%';
+                }, 1500);
+            }
+        });
+
+        // Initialize progress
+        updateProgress();
+
+        // Add smooth focus transitions
+        document.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.style.transform = 'scale(1.01)';
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
