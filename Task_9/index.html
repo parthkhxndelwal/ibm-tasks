@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic Knowledge Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: #3b82f6;
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .progress-bar {
+            background: #e2e8f0;
+            height: 6px;
+            width: 100%;
+            position: relative;
+        }
+
+        .progress-fill {
+            background: #3b82f6;
+            height: 100%;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-content {
+            padding: 2rem;
+        }
+
+        .question-container {
+            display: none;
+        }
+
+        .question-container.active {
+            display: block;
+        }
+
+        .question-number {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 1rem;
+        }
+
+        .question {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 1.5rem;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .option {
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .option:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .option.selected {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .option-label {
+            font-weight: 600;
+            color: #3b82f6;
+            margin-right: 0.5rem;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #e2e8f0;
+            color: #64748b;
+        }
+
+        .btn-secondary:hover {
+            background: #cbd5e1;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .results {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .results.active {
+            display: block;
+        }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 2rem;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .score-excellent {
+            background: #10b981;
+        }
+
+        .score-good {
+            background: #3b82f6;
+        }
+
+        .score-average {
+            background: #f59e0b;
+        }
+
+        .score-poor {
+            background: #ef4444;
+        }
+
+        .score-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .score-message {
+            font-size: 1.125rem;
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+
+        .results-details {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-correct {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .result-incorrect {
+            color: #ef4444;
+            font-weight: 600;
+        }
+
+        .restart-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .restart-btn:hover {
+            background: #2563eb;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+            }
+
+            .header {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .quiz-content {
+                padding: 1.5rem;
+            }
+
+            .question {
+                font-size: 1.125rem;
+            }
+
+            .navigation {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .score-circle {
+                width: 120px;
+                height: 120px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Basic Knowledge Quiz</h1>
+            <p>Test your general knowledge with 10 simple questions</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+
+        <div class="quiz-content">
+            <!-- Question 1 -->
+            <div class="question-container active" data-question="0">
+                <div class="question-number">Question 1 of 10</div>
+                <div class="question">What is the capital of France?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> London
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> Paris
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> Berlin
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> Madrid
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-container" data-question="1">
+                <div class="question-number">Question 2 of 10</div>
+                <div class="question">How many days are there in a week?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> 5
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> 6
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> 7
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> 8
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-container" data-question="2">
+                <div class="question-number">Question 3 of 10</div>
+                <div class="question">What color do you get when you mix red and white?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> Purple
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> Pink
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> Orange
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> Yellow
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-container" data-question="3">
+                <div class="question-number">Question 4 of 10</div>
+                <div class="question">What is 5 + 3?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> 7
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> 8
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> 9
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> 10
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-container" data-question="4">
+                <div class="question-number">Question 5 of 10</div>
+                <div class="question">Which animal is known as the "King of the Jungle"?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> Tiger
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> Elephant
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> Lion
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> Bear
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-container" data-question="5">
+                <div class="question-number">Question 6 of 10</div>
+                <div class="question">How many months have 31 days?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> 6
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> 7
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> 8
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> 9
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-container" data-question="6">
+                <div class="question-number">Question 7 of 10</div>
+                <div class="question">What is the largest planet in our solar system?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> Earth
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> Jupiter
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> Saturn
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> Mars
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-container" data-question="7">
+                <div class="question-number">Question 8 of 10</div>
+                <div class="question">What do bees make?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> Milk
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> Honey
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> Butter
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> Cheese
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-container" data-question="8">
+                <div class="question-number">Question 9 of 10</div>
+                <div class="question">How many sides does a triangle have?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> 2
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> 3
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> 4
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> 5
+                    </div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-container" data-question="9">
+                <div class="question-number">Question 10 of 10</div>
+                <div class="question">What do we use to see?</div>
+                <div class="options">
+                    <div class="option" data-answer="a">
+                        <span class="option-label">A.</span> Ears
+                    </div>
+                    <div class="option" data-answer="b">
+                        <span class="option-label">B.</span> Nose
+                    </div>
+                    <div class="option" data-answer="c">
+                        <span class="option-label">C.</span> Eyes
+                    </div>
+                    <div class="option" data-answer="d">
+                        <span class="option-label">D.</span> Mouth
+                    </div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button class="btn btn-secondary" id="prevBtn" onclick="previousQuestion()" disabled>Previous</button>
+                <span id="questionStatus">1 of 10</span>
+                <button class="btn btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Next</button>
+            </div>
+        </div>
+
+        <div class="results" id="results">
+            <div class="score-circle" id="scoreCircle">
+                <span id="scoreDisplay">0/10</span>
+            </div>
+            <div class="score-text" id="scoreText">Your Score</div>
+            <div class="score-message" id="scoreMessage">Well done!</div>
+            
+            <div class="results-details">
+                <div class="result-item">
+                    <span>Correct Answers:</span>
+                    <span class="result-correct" id="correctCount">0</span>
+                </div>
+                <div class="result-item">
+                    <span>Incorrect Answers:</span>
+                    <span class="result-incorrect" id="incorrectCount">0</span>
+                </div>
+                <div class="result-item">
+                    <span>Percentage:</span>
+                    <span id="percentage">0%</span>
+                </div>
+            </div>
+
+            <button class="restart-btn" onclick="restartQuiz()">Take Quiz Again</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            { question: 0, correct: 'b' }, // Paris
+            { question: 1, correct: 'c' }, // 7 days
+            { question: 2, correct: 'b' }, // Pink
+            { question: 3, correct: 'b' }, // 8
+            { question: 4, correct: 'c' }, // Lion
+            { question: 5, correct: 'b' }, // 7 months
+            { question: 6, correct: 'b' }, // Jupiter
+            { question: 7, correct: 'b' }, // Honey
+            { question: 8, correct: 'b' }, // 3 sides
+            { question: 9, correct: 'c' }  // Eyes
+        ];
+
+        let currentQuestion = 0;
+        let userAnswers = [];
+        let score = 0;
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const questionStatus = document.getElementById('questionStatus');
+
+            prevBtn.disabled = currentQuestion === 0;
+            
+            // Check if current question is answered
+            const currentAnswer = userAnswers[currentQuestion];
+            nextBtn.disabled = !currentAnswer;
+            
+            if (currentQuestion === questions.length - 1 && currentAnswer) {
+                nextBtn.textContent = 'Finish Quiz';
+            } else {
+                nextBtn.textContent = 'Next';
+            }
+
+            questionStatus.textContent = `${currentQuestion + 1} of ${questions.length}`;
+        }
+
+        function showQuestion(questionIndex) {
+            // Hide all questions
+            document.querySelectorAll('.question-container').forEach(container => {
+                container.classList.remove('active');
+            });
+
+            // Show current question
+            document.querySelector(`[data-question="${questionIndex}"]`).classList.add('active');
+
+            // Restore selected answer if exists
+            if (userAnswers[questionIndex]) {
+                const selectedOption = document.querySelector(`[data-question="${questionIndex}"] .option[data-answer="${userAnswers[questionIndex]}"]`);
+                if (selectedOption) {
+                    selectedOption.classList.add('selected');
+                }
+            }
+
+            updateProgress();
+            updateNavigation();
+        }
+
+        function selectOption(element) {
+            // Remove selection from all options in current question
+            const currentContainer = document.querySelector(`[data-question="${currentQuestion}"]`);
+            currentContainer.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Add selection to clicked option
+            element.classList.add('selected');
+
+            // Store answer
+            userAnswers[currentQuestion] = element.getAttribute('data-answer');
+
+            updateNavigation();
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+            } else {
+                // Finish quiz
+                calculateScore();
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 0) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+            }
+        }
+
+        function calculateScore() {
+            score = 0;
+            for (let i = 0; i < questions.length; i++) {
+                if (userAnswers[i] === questions[i].correct) {
+                    score++;
+                }
+            }
+        }
+
+        function showResults() {
+            document.querySelector('.quiz-content').style.display = 'none';
+            document.getElementById('results').classList.add('active');
+
+            const scoreDisplay = document.getElementById('scoreDisplay');
+            const scoreText = document.getElementById('scoreText');
+            const scoreMessage = document.getElementById('scoreMessage');
+            const scoreCircle = document.getElementById('scoreCircle');
+            const correctCount = document.getElementById('correctCount');
+            const incorrectCount = document.getElementById('incorrectCount');
+            const percentage = document.getElementById('percentage');
+
+            scoreDisplay.textContent = `${score}/10`;
+            correctCount.textContent = score;
+            incorrectCount.textContent = 10 - score;
+            percentage.textContent = `${(score * 10)}%`;
+
+            // Set score circle color and message based on performance
+            scoreCircle.className = 'score-circle';
+            if (score >= 9) {
+                scoreCircle.classList.add('score-excellent');
+                scoreMessage.textContent = 'Excellent! You are a quiz master!';
+            } else if (score >= 7) {
+                scoreCircle.classList.add('score-good');
+                scoreMessage.textContent = 'Great job! Well done!';
+            } else if (score >= 5) {
+                scoreCircle.classList.add('score-average');
+                scoreMessage.textContent = 'Good effort! Keep practicing!';
+            } else {
+                scoreCircle.classList.add('score-poor');
+                scoreMessage.textContent = 'Keep learning and try again!';
+            }
+        }
+
+        function restartQuiz() {
+            currentQuestion = 0;
+            userAnswers = [];
+            score = 0;
+
+            // Reset all selections
+            document.querySelectorAll('.option').forEach(option => {
+                option.classList.remove('selected');
+            });
+
+            // Hide results and show quiz
+            document.getElementById('results').classList.remove('active');
+            document.querySelector('.quiz-content').style.display = 'block';
+
+            showQuestion(0);
+        }
+
+        // Initialize the quiz
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add click event listeners to all options
+            document.querySelectorAll('.option').forEach(option => {
+                option.addEventListener('click', function() {
+                    selectOption(this);
+                });
+            });
+
+            showQuestion(0);
+        });
+    </script>
+</body>
+</html>

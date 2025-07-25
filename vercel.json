@@ -2,6 +2,6 @@
   "rewrites": [
     { "source": "/task1", "destination": "/task1/index.html" },
     { "source": "/task2", "destination": "/task2/index.html" },
-    { "source": "/", "destination": "/vercel/index.html" }
+    { "source": "/", "destination": "/root/index.html" }
   ]
 }
