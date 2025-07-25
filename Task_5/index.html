@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery Carousel - Modern UI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: hsl(0 0% 98%);
+            color: hsl(222.2 84% 4.9%);
+            line-height: 1.5;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, hsl(222.2 84% 4.9%) 0%, hsl(210 40% 50%) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.125rem;
+            color: hsl(215.4 16.3% 46.9%);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Main Carousel */
+        .carousel-container {
+            position: relative;
+            margin-bottom: 4rem;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            background: white;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            height: 600px;
+            overflow: hidden;
+        }
+
+        .carousel-slides {
+            display: flex;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            height: 100%;
+        }
+
+        .carousel-slide {
+            min-width: 100%;
+            height: 100%;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .carousel-slide::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.1) 100%);
+        }
+
+        .slide-content {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .slide-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: hsl(222.2 84% 4.9%);
+        }
+
+        .slide-description {
+            color: hsl(215.4 16.3% 46.9%);
+            font-size: 0.875rem;
+        }
+
+        /* Navigation Buttons */
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: 1px solid hsl(214.3 31.8% 91.4%);
+            border-radius: 50%;
+            width: 3rem;
+            height: 3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: hsl(210 40% 98%);
+            transform: translateY(-50%) scale(1.05);
+        }
+
+        .carousel-nav.prev {
+            left: 1rem;
+        }
+
+        .carousel-nav.next {
+            right: 1rem;
+        }
+
+        .carousel-nav svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: hsl(222.2 84% 4.9%);
+        }
+
+        /* Dots Indicator */
+        .carousel-dots {
+            position: absolute;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 0.75rem;
+            height: 0.75rem;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .dot.active {
+            background: white;
+            transform: scale(1.2);
+        }
+
+        /* Gallery Grid */
+        .gallery-section {
+            margin-top: 4rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 2rem;
+            color: hsl(222.2 84% 4.9%);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-item {
+            background: white;
+            border-radius: 0.75rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid hsl(214.3 31.8% 91.4%);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item-content {
+            padding: 1rem;
+        }
+
+        .gallery-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: hsl(222.2 84% 4.9%);
+        }
+
+        .gallery-item-description {
+            font-size: 0.875rem;
+            color: hsl(215.4 16.3% 46.9%);
+            line-height: 1.4;
+        }
+
+        /* Pinterest-style Masonry Grid */
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid hsl(214.3 31.8% 91.4%);
+        }
+
+        .masonry-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .masonry-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .masonry-item:hover img {
+            transform: scale(1.02);
+        }
+
+        .masonry-content {
+            padding: 1rem;
+        }
+
+        .masonry-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: hsl(222.2 84% 4.9%);
+        }
+
+        .masonry-description {
+            font-size: 0.75rem;
+            color: hsl(215.4 16.3% 46.9%);
+            line-height: 1.4;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 1rem;
+            overflow: hidden;
+            background: white;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-close:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .masonry-grid {
+                column-count: 3;
+            }
+            
+            .header h1 {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .carousel {
+                height: 400px;
+            }
+            
+            .masonry-grid {
+                column-count: 2;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 1rem;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .slide-content {
+                left: 1rem;
+                right: 1rem;
+                bottom: 1rem;
+                padding: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .masonry-grid {
+                column-count: 1;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid hsl(222.2 84% 4.9%);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <h1>Gallery Showcase</h1>
+            <p>Discover beautiful moments captured through the lens. A curated collection of stunning photography and visual artistry.</p>
+        </header>
+
+        <!-- Main Carousel -->
+        <section class="carousel-container">
+            <div class="carousel">
+                <div class="carousel-slides" id="carouselSlides">
+                    <!-- Slides will be populated by JavaScript -->
+                </div>
+                
+                <button class="carousel-nav prev" id="prevBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 18l-6-6 6-6"/>
+                    </svg>
+                </button>
+                
+                <button class="carousel-nav next" id="nextBtn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 18l6-6-6-6"/>
+                    </svg>
+                </button>
+                
+                <div class="carousel-dots" id="carouselDots">
+                    <!-- Dots will be populated by JavaScript -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Grid -->
+        <section class="gallery-section">
+            <h2 class="section-title">Featured Gallery</h2>
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Gallery items will be populated by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Pinterest-style Masonry -->
+        <section class="gallery-section">
+            <h2 class="section-title">Explore More</h2>
+            <div class="masonry-grid" id="masonryGrid">
+                <!-- Masonry items will be populated by JavaScript -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
+            <img class="modal-image" id="modalImage" src="" alt="">
+        </div>
+    </div>
+
+    <script>
+        // Sample data - In a real application, this would come from an API
+        const carouselData = [
+            {
+                image: 'https://images.unsplash.com/photo-1612441804231-77a36b284856?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Mountain Landscape',
+                description: 'Breathtaking view of snow-capped mountains under a clear blue sky'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1605196560547-b2f7281b7355?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Forest Trail',
+                description: 'A peaceful path winding through ancient trees and dappled sunlight'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1514747975201-4715db583da9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Ocean Waves',
+                description: 'Crystal clear waters meeting pristine sandy shores'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1650493359585-f394207e8460?q=80&w=1460&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Alpine Lake',
+                description: 'Serene mountain lake reflecting the surrounding peaks'
+            }
+        ];
+
+        const galleryData = [
+            {
+                image: 'https://images.unsplash.com/photo-1504252060324-1c76e2e09939?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Misty Mountains',
+                description: 'Early morning mist rolling over mountain ridges'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1505551986134-9b08dbb02db7?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Sunset Forest',
+                description: 'Golden hour lighting through tall pine trees'
+            },
+            {
+                image: 'https://images.unsplash.com/2/08.jpg?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Rocky Shore',
+                description: 'Dramatic coastline with crashing waves'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1520440718111-45fe694b330a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Desert Dunes',
+                description: 'Vast sand dunes under starlit sky'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1704080864842-2577d94ebb1c?q=80&w=1037&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Urban Skyline',
+                description: 'City lights reflected in calm water'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1557858832-b23c89645f0b?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Tropical Paradise',
+                description: 'Palm trees swaying over turquoise waters'
+            }
+        ];
+
+        const masonryData = [
+            {
+                image: 'https://plus.unsplash.com/premium_photo-1675756583711-ce312872227b?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8bm9ydGhlcm4lMjBsaWdodHN8ZW58MHx8MHx8fDA%3D',
+                title: 'Northern Lights',
+                description: 'Aurora borealis dancing across the night sky'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1528470621820-ad2177f438d6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Desert Sunset',
+                description: 'Vibrant colors painting the desert landscape'
+            },
+            {
+                image: 'https://plus.unsplash.com/premium_photo-1686050878751-89499d28d153?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Starry Night',
+                description: 'Millions of stars illuminating the darkness'
+            },
+            {
+                image: 'https://plus.unsplash.com/premium_photo-1665311552973-53cdaeaa52c3?q=80&w=1172&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Forest Path',
+                description: 'Mysterious trail through ancient woods'
+            },
+            {
+                image: 'https://plus.unsplash.com/premium_photo-1661963748474-56c522a0921a?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Mountain Peak',
+                description: 'Reaching for the clouds at high altitude'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1677759702338-99b6b3eda171?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Ocean Depths',
+                description: 'Deep blue waters stretching to the horizon'
+            },
+            {
+                image: 'https://images.unsplash.com/photo-1472494200822-18e5bd52ebfb?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Alpine Beauty',
+                description: 'Crystal clear lake surrounded by peaks'
+            },
+            {
+                image: 'https://images.unsplash.com/uploads/141360120473818bc572e/fa19555e?q=80&w=1167&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
+                title: 'Misty Dawn',
+                description: 'First light breaking through morning fog'
+            }
+        ];
+
+        // Carousel functionality
+        let currentSlide = 0;
+        const totalSlides = carouselData.length;
+
+        function initCarousel() {
+            const slidesContainer = document.getElementById('carouselSlides');
+            const dotsContainer = document.getElementById('carouselDots');
+
+            // Create slides
+            carouselData.forEach((slide, index) => {
+                const slideElement = document.createElement('div');
+                slideElement.className = 'carousel-slide';
+                slideElement.style.backgroundImage = `url(${slide.image})`;
+                slideElement.innerHTML = `
+                    <div class="slide-content">
+                        <h3 class="slide-title">${slide.title}</h3>
+                        <p class="slide-description">${slide.description}</p>
+                    </div>
+                `;
+                slidesContainer.appendChild(slideElement);
+
+                // Create dots
+                const dot = document.createElement('div');
+                dot.className = `dot ${index === 0 ? 'active' : ''}`;
+                dot.addEventListener('click', () => goToSlide(index));
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function goToSlide(slideIndex) {
+            currentSlide = slideIndex;
+            const slidesContainer = document.getElementById('carouselSlides');
+            const dots = document.querySelectorAll('.dot');
+
+            slidesContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+            dots.forEach((dot, index) => {
+                dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+            goToSlide(currentSlide);
+        }
+
+        // Gallery functionality
+        function initGallery() {
+            const galleryGrid = document.getElementById('galleryGrid');
+
+            galleryData.forEach(item => {
+                const galleryItem = document.createElement('div');
+                galleryItem.className = 'gallery-item';
+                galleryItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" loading="lazy">
+                    <div class="gallery-item-content">
+                        <h3 class="gallery-item-title">${item.title}</h3>
+                        <p class="gallery-item-description">${item.description}</p>
+                    </div>
+                `;
+                galleryItem.addEventListener('click', () => openModal(item.image));
+                galleryGrid.appendChild(galleryItem);
+            });
+        }
+
+        function initMasonry() {
+            const masonryGrid = document.getElementById('masonryGrid');
+
+            masonryData.forEach(item => {
+                const masonryItem = document.createElement('div');
+                masonryItem.className = 'masonry-item';
+                masonryItem.innerHTML = `
+                    <img src="${item.image}" alt="${item.title}" loading="lazy">
+                    <div class="masonry-content">
+                        <h3 class="masonry-title">${item.title}</h3>
+                        <p class="masonry-description">${item.description}</p>
+                    </div>
+                `;
+                masonryItem.addEventListener('click', () => openModal(item.image));
+                masonryGrid.appendChild(masonryItem);
+            });
+        }
+
+        // Modal functionality
+        function openModal(imageSrc) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modalImage');
+            
+            modalImage.src = imageSrc;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initCarousel();
+            initGallery();
+            initMasonry();
+
+            // Carousel navigation
+            document.getElementById('nextBtn').addEventListener('click', nextSlide);
+            document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+            // Modal controls
+            document.getElementById('modalClose').addEventListener('click', closeModal);
+            document.getElementById('modal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+
+            // Keyboard navigation
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                } else if (e.key === 'ArrowLeft') {
+                    prevSlide();
+                } else if (e.key === 'ArrowRight') {
+                    nextSlide();
+                }
+            });
+
+            // Auto-play carousel
+            setInterval(nextSlide, 5000);
+        });
+
+        // Touch/swipe support for mobile
+        let startX = 0;
+        let endX = 0;
+
+        document.getElementById('carouselSlides').addEventListener('touchstart', function(e) {
+            startX = e.touches[0].clientX;
+        });
+
+        document.getElementById('carouselSlides').addEventListener('touchmove', function(e) {
+            e.preventDefault();
+        });
+
+        document.getElementById('carouselSlides').addEventListener('touchend', function(e) {
+            endX = e.changedTouches[0].clientX;
+            const difference = startX - endX;
+
+            if (Math.abs(difference) > 50) {
+                if (difference > 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
